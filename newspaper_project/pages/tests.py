@@ -4,6 +4,18 @@ from django.urls import reverse
 
 
 class HomePageTests(SimpleTestCase):
+    def test_url_exists_at_correct_location_homepageview(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_homepage_view(self):
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "home.html")
+        self.assertContains(response, "Home")
+
+
+class HomePageTests(SimpleTestCase):
 
     def test_home_page_status_code(self):
         response = self.client.get('/')
@@ -24,7 +36,7 @@ class SignupPageTests(TestCase):
     email = 'newuser@email.com'
 
     def test_signup_page_status_code(self):
-        response = self.client.get('/users/signup/')
+        response = self.client.get('/accounts/signup/')
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_by_name(self):
@@ -44,3 +56,4 @@ class SignupPageTests(TestCase):
                          [0].username, self.username)
         self.assertEqual(get_user_model().objects.all()
                          [0].email, self.email)
+
